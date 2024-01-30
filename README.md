@@ -11,7 +11,7 @@ This repository contains the resources and documentation for a project focused o
 - [Contributing](#contributing)
 
 ## Project Overview
-This project focuses on developing a structured and optimized SQL database, originating from a dataset that encompasses detailed statistics of Premier League players from the 2019/2020 season. This facilitates an in-depth analysis and provides insight into different metrics to measure some of the best performers in this season.The dataset was sourced from Kaggle.
+This project focuses on developing a structured and optimized SQL database, originating from a dataset that encompasses detailed statistics of Premier League players from the 2019/2020 season. This facilitates an in-depth analysis and provides insight into different metrics to measure some of the best performers in this season. The dataset was sourced from Kaggle.
 
 On a high level, this dataset is quite extensive, but the dataset's complexity can hinder understanding, so normalization is necessary. By the end of this engagement, the initial dataset which is in csv format will be converted to a normalized SQL database.
 
