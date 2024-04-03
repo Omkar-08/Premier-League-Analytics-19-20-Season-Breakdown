@@ -1,4 +1,4 @@
-# Premier League Player Statistics Database Project
+# Premier League Player Statistics Database Management Project
 
 This repository contains the resources and documentation for a project focused on creating a structured SQL database from Premier League player statistics for the 2019/2020 season.
 
