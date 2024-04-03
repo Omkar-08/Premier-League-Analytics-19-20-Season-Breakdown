@@ -1,41 +1,27 @@
 use epl_players;
 
-
-################
-## Question 1 ##
-################
-# 1)	How many players were from England (gb-eng)?
+# First, lets find the number of many players from England (gb-eng)?
 SELECT COUNT(P.PLAYER_ID) AS NumberOfEnglishPlayers, COUNT(P.PLAYER_ID) / (SELECT COUNT(*) FROM PLAYER) AS ProportionOfEnglishPlayers
 FROM PLAYER P
 JOIN NATIONALITY N ON P.NATIONALITY_ID = N.NATIONALITY_ID
 WHERE N.NATIONALITY_NAME = 'GB-ENG';
 
 
-################
-## Question 2 ##
-################
-# 2)	What is the distribution of player nationalities within the league?
+# What is the overall distribution of player nationalities within the league?
 SELECT N.NATIONALITY_NAME, COUNT(P.PLAYER_ID) AS NUMBEROFPLAYERS
 FROM PLAYER P
 JOIN NATIONALITY N ON P.NATIONALITY_ID = N.NATIONALITY_ID
 GROUP BY N.NATIONALITY_NAME
 ORDER BY NUMBEROFPLAYERS DESC;
 
-################
-## Question 3 ##
-################
-# 3)	Is there a correlation between heights and the primary position played by players?
+# Next, we see if there a correlation between heights and the primary position played by players?
 SELECT POS.POSITION_NAME, AVG(PLAYER.HEIGHT) AS AVERAGEHEIGHT, STDDEV_POP(PLAYER.HEIGHT) AS STDDEVHEIGHT
 FROM PLAYER
 JOIN PLAYER_POSITION POS ON PLAYER.POSITION_ID = POS.POSITION_ID
 GROUP BY POS.POSITION_NAME
 ORDER BY AVERAGEHEIGHT DESC;
 
-
-################
-## Question 4 ##
-################
-# 4)	Were there any players who went out on loan/transferred to another team during the season?
+# Were there any players who went out on loan/transferred to another team during the season?
 SELECT P.PLAYER_NAME , T.TEAM_NAME AS TEAMNAME
 FROM PLAYER P
 JOIN TEAM T ON P.TEAM_ID = T.TEAM_ID
@@ -44,10 +30,7 @@ WHERE P.PLAYER_ID IN (SELECT PLAYER_ID FROM PLAYER
 		HAVING COUNT(PLAYER_ID) > 1)
 ORDER BY P.PLAYER_NAME;
 
-################
-## Question 5 ##
-################
-# 5)	Who leads the league in successful dribbles and what is their primary position?
+# Who leads the league in successful dribbles and what is their primary position?
 SELECT P.PLAYER_NAME, POS.POSITION_NAME, MAX(OFP.DRIBBLES_WON) AS MAXDRIBBLES
 FROM PLAYER P
 JOIN OUTFIELD_PLAYER OFP ON P.PLAYER_ID = OFP.PLAYER_ID
@@ -56,10 +39,7 @@ GROUP BY P.PLAYER_NAME, POS.POSITION_NAME
 ORDER BY MAXDRIBBLES DESC
 LIMIT 1;
 
-################
-## Question 6 ##
-################
-# 6)	Who were the top 5 most creative players in the league?
+# ho were the top 5 most creative players in the league?
 SELECT PLAYER_NAME, SUM(CREATIVEACTIONS) AS TOTALCREATIVEACTIONS
 FROM ( SELECT P.PLAYER_NAME, OP.ASSISTS AS CREATIVEACTIONS
     FROM PLAYER P
@@ -72,20 +52,13 @@ GROUP BY PLAYER_NAME
 ORDER BY TOTALCREATIVEACTIONS DESC
 LIMIT 5;
 
-
-################
-## Question 7 ##
-################
-# 7)	What are the average ages of different positions?
+# What are the average ages of different positions?
 SELECT POS.POSITION_NAME, AVG(P.AGE) AS AVERAGEAGE
 FROM PLAYER P
 JOIN PLAYER_POSITION POS ON P.POSITION_ID = POS.POSITION_ID
 GROUP BY POS.POSITION_NAME;
 
-################
-## Question 8 ##
-################
-# 8)	Which goalkeepers are better at saving long range shots compared to short range shots and vice versa?
+# To look specifically at goalkeepers, whic of them are better at saving long range shots compared to short range shots and vice versa?
 SELECT P.PLAYER_NAME AS GOALKEEPERNAME, GK.INSIDE_BOX_SAVES, GK.OUTSIDE_BOX_SAVES,
     CASE
         WHEN GK.INSIDE_BOX_SAVES > GK.OUTSIDE_BOX_SAVES THEN 'Better at Inside Box Saves'
@@ -95,11 +68,8 @@ SELECT P.PLAYER_NAME AS GOALKEEPERNAME, GK.INSIDE_BOX_SAVES, GK.OUTSIDE_BOX_SAVE
 FROM PLAYER P
 JOIN GOALKEEPER GK ON P.PLAYER_ID = GK.PLAYER_ID;
 
-
-################
-## Question 9 ##
-################
-# 9)	Using some of the results obtained above, which players would be part of the Team of the Season?
+# Finally, which players would be part of the Team of the Season?
+# In this step, I used diffferent metrics to evalaute which team of 11 are the best performers
 SELECT SQ.TEAM_NAME, SQ.PLAYERNAME, SQ.POSITION_NAME, SQ.RATING, SQ.GOALS, SQ.ASSISTS
 FROM (SELECT TEAM.TEAM_NAME, PLAYER.PLAYER_NAME AS PLAYERNAME, POS.POSITION_NAME, 
 		COALESCE(OUTFIELD_PLAYER.RATING, GOALKEEPER.RATING) AS RATING,
